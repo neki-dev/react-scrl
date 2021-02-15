@@ -1,0 +1,87 @@
+.scrollbar-screen {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+
+  .scrollbar-content {
+    position: absolute;
+    left: 0;
+    top: 0;
+    min-width: 100%;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &:not(.dragging) {
+      transition: top 0.3s ease-out;
+    }
+  }
+
+  .scrollbar-thumb-position {
+    position: absolute;
+  }
+
+  .scrollbar-thumb {
+    position: absolute;
+    background: #fff;
+    z-index: 2;
+    flex-direction: column;
+
+    .scrollbar-track {
+      position: absolute;
+      padding: 2px;
+
+      &:not(.dragging) {
+        transition: top 0.3s ease-out;
+      }
+
+      span {
+        display: block;
+        height: 100%;
+        width: 100%;
+        background: rgba(#000, 0.07);
+        border-radius: 3px;
+      }
+
+      &.dragging span,
+      &:hover span {
+        background: rgba(#000, 0.2);
+      }
+    }
+
+    &.direction-x {
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 9px;
+      border-top: 1px solid rgba(#000, 0.05);
+
+      .scrollbar-track {
+        top: 0;
+        bottom: 0;
+        left: 0;
+        min-width: 16px;
+      }
+    }
+
+    &.direction-y {
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 9px;
+      border-left: 1px solid rgba(#000, 0.05);
+
+      .scrollbar-track {
+        left: 0;
+        right: 0;
+        top: 0;
+        min-height: 16px;
+      }
+    }
+  }
+
+  &:hover .scrollbar-track:not(.dragging):not(:hover) span {
+    background: rgba(#000, 0.12);
+  }
+}

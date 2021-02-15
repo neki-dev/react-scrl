@@ -1,0 +1,31 @@
+{
+	"name": "react-scrl",
+	"description": "Simple and versatile stylized scrollbar for React",
+	"version": "1.0.0",
+	"author": {
+		"name": "Essle Jaxcate",
+		"email": "me@essle.ru",
+		"url": "https://essle.ru/"
+	},
+	"keywords": [
+		"react",
+		"scrollbar",
+		"scroll",
+		"scrolling",
+		"scroller"
+	],
+	"license": "MIT",
+	"main": "./src/index.js",
+	"homepage": "https://github.com/essle/react-scrl#readme",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/essle/react-scrl.git"
+	},
+	"devDependencies": {
+		"prop-types": "^15.7.2"
+	},
+	"dependencies": {
+		"react": "^16.14.0",
+		"react-resize-detector": "^6.5.0"
+	}
+}
