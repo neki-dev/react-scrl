@@ -4,8 +4,8 @@
   * _Vertical and horizontal_
   * _Stylizing_
   * _Touchable_ (soon...)
-
 ---
+* ### [Demo](https://stackblitz.com/edit/react-qpagy3)
 
 * ### Install
 
