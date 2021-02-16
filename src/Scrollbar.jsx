@@ -82,7 +82,8 @@ const Scrollbar = ({children, speed, className, onScroll}) => {
                 DIRECTIONS.reduce((a, b) => ({...a, [(b === 'x') ? 'left' : 'top']: ((sizeContent[b] - sizeScreen[b]) * -offsets[b])}), {})
             )}>{children}</div>
             {DIRECTIONS.map((d) => (scopes[d] < 1) && (
-                <Track key={d} offset={offsets[d]} scope={scopes[d]} direction={d} size={sizeScreen[d]} onUpdate={(offset) => updateOffset(d, offset)} onToggleDrag={setDragging} />
+                <Track key={d} offset={offsets[d]} scope={scopes[d]} direction={d} size={sizeScreen[d]} onToggleDrag={setDragging}
+                    onUpdate={(offset) => updateOffset(d, offset)} />
             ))}
         </div>
     );

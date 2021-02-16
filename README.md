@@ -1,6 +1,6 @@
 ![react-scrl](https://i.ibb.co/zNPZ2Rr/scrl.png)
 * #### Simple and versatile stylized scrollbar for React
-  * _Size 245 B
+  * _Size 245 byte_
   * _Vertical and horizontal_
   * _Stylizing_
   * _Touchable_ (soon...)

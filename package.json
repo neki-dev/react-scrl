@@ -1,7 +1,7 @@
 {
 	"name": "react-scrl",
 	"description": "Simple and versatile stylized scrollbar for React",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"author": {
 		"name": "Essle Jaxcate",
 		"email": "me@essle.ru",
@@ -22,7 +22,7 @@
 		"url": "git+https://github.com/essle/react-scrl.git"
 	},
 	"devDependencies": {
-		"react": "^16.14.0",
+		"react": "^17.0.1",
 		"prop-types": "^15.7.2"
 	},
 	"dependencies": {
