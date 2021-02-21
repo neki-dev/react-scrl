@@ -19,6 +19,7 @@ const DIRECTIONS = ['x', 'y'];
 
 const Scrollbar = ({children, speed, className, onScroll}) => {
 
+    const [boundScreen, setBoundScreen] = useState({});
     const [sizeScreen, setSizeScreen] = useState({x: 0, y: 0});
     const [sizeContent, setSizeContent] = useState({x: 0, y: 0});
     const [offsets, setOffsets] = useState({x: 0, y: 0});
@@ -67,6 +68,18 @@ const Scrollbar = ({children, speed, className, onScroll}) => {
     }, [scopes]);
 
     useEffect(() => {
+        const bounds = {};
+        for (const direction of DIRECTIONS) {
+            const target = (direction === 'x') ? 'width' : 'height';
+            const bound = parseInt(getComputedStyle(refScreen.current)[`max-${target}`]);
+            if (bound) {
+                bounds[target] = Math.min(bound, sizeContent[direction]);
+            }
+        }
+        setBoundScreen(bounds);
+    }, [sizeScreen, sizeContent]);
+
+    useEffect(() => {
         if (!onScroll) {
             return;
         }
@@ -77,7 +90,7 @@ const Scrollbar = ({children, speed, className, onScroll}) => {
     // ---
 
     return (
-        <div ref={refScreen} className={`scrollbar-screen ${className}`}>
+        <div ref={refScreen} className={`scrollbar-screen ${className}`} style={boundScreen}>
             <div ref={refContent} className={`scrollbar-content ${isDragging ? 'dragging' : ''}`} style={(
                 DIRECTIONS.reduce((a, b) => ({...a, [(b === 'x') ? 'left' : 'top']: ((sizeContent[b] - sizeScreen[b]) * -offsets[b])}), {})
             )}>{children}</div>
