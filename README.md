@@ -24,20 +24,21 @@ export default () => {
     /**
      * @param {number} x - Left offset in px
      * @param {number} y - Top offset in px
-     * @param {Object} params - Params of scrolling
-     * @param {boolean} params.isDragging - Is scrolling by mouse drag
+     * @param {Object} offsets - Offsets in %
+     * @param {boolean} isDragging - Is scrolling by mouse drag
      */
-    const onScroll = useCallback((x, y, params) => {
-        console.log(x, y, params);
+    const onScroll = useCallback((e) => {
+        console.log(e.x, e.y);
     }, []);
 
     return (
         /**
          * @param {string} className - Custom class for wrapper
+         * @param {Object} defaultOffsets - Default offsets in %
          * @param {number} speed - Speed of scrolling
          * @param {function} onScroll - Event of scrolling
          */
-        <Scrollbar className="example" speed={1} onScroll={onScroll}>
+        <Scrollbar className="example" speed={1} defaultOffsets={{x: 0, y: 0}} onScroll={onScroll}>
             <p>So many letters...</p>
         </Scrollbar>
     );

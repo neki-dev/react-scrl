@@ -17,12 +17,12 @@ if ('onwheel' in document) {
 
 const DIRECTIONS = ['x', 'y'];
 
-const Scrollbar = forwardRef(({children, speed, className, onScroll}, ref) => {
+const Scrollbar = forwardRef(({children, speed, className, defaultOffsets, onScroll}, ref) => {
 
     const [boundScreen, setBoundScreen] = useState({});
     const [sizeScreen, setSizeScreen] = useState({x: 0, y: 0});
     const [sizeContent, setSizeContent] = useState({x: 0, y: 0});
-    const [offsets, setOffsets] = useState({x: 0, y: 0});
+    const [offsets, setOffsets] = useState(defaultOffsets);
     const [isDragging, setDragging] = useState(false);
 
     const {ref: refScreen} = useResizeDetector({
@@ -58,8 +58,10 @@ const Scrollbar = forwardRef(({children, speed, className, onScroll}, ref) => {
 
     useImperativeHandle(ref, () => ({
         set: (direction, pxOffset) => {
-            const offset = pxOffset / (sizeContent[direction] - sizeScreen[direction]);
-            updateOffset(direction, offset);
+            const diff = sizeContent[direction] - sizeScreen[direction];
+            if (diff > 0) {
+                updateOffset(direction, pxOffset / diff);
+            }
         },
         get: (direction) => {
             return (sizeContent[direction] - sizeScreen[direction]) * offsets[direction];
@@ -94,8 +96,13 @@ const Scrollbar = forwardRef(({children, speed, className, onScroll}, ref) => {
             return;
         }
         const pxOffsets = DIRECTIONS.map((d) => ((sizeContent[d] - sizeScreen[d]) * offsets[d]));
-        onScroll(...pxOffsets, {isDragging});
-    }, [offsets, sizeContent, onScroll, isDragging]);
+        onScroll({
+            isDragging,
+            offsets,
+            x: pxOffsets[0],
+            y: pxOffsets[1],
+        });
+    }, [offsets, sizeContent, sizeScreen]);
 
     // ---
 
@@ -106,7 +113,7 @@ const Scrollbar = forwardRef(({children, speed, className, onScroll}, ref) => {
             )}>{children}</div>
             {DIRECTIONS.map((d) => (scopes[d] < 1) && (
                 <Track key={d} offset={offsets[d]} scope={scopes[d]} direction={d} size={sizeScreen[d]} onToggleDrag={setDragging}
-                    onUpdate={(offset) => updateOffset(d, offset)} />
+                       onUpdate={(offset) => updateOffset(d, offset)} />
             ))}
         </div>
     );
@@ -117,12 +124,14 @@ Scrollbar.defaultProps = {
     className: '',
     speed: 1,
     onScroll: undefined,
+    defaultOffsets: {x: 0, y: 0},
 };
 
 Scrollbar.propTypes = {
     className: PropTypes.string,
     speed: PropTypes.number,
     onScroll: PropTypes.func,
+    defaultOffsets: PropTypes.object,
 };
 
 export default Scrollbar;
