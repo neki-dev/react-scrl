@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect, useCallback} from 'react';
+import React, {useState, useMemo, useEffect, useCallback, forwardRef, useImperativeHandle} from 'react';
 import PropTypes from 'prop-types';
 import {useResizeDetector} from 'react-resize-detector';
 
@@ -17,7 +17,7 @@ if ('onwheel' in document) {
 
 const DIRECTIONS = ['x', 'y'];
 
-const Scrollbar = ({children, speed, className, onScroll}) => {
+const Scrollbar = forwardRef(({children, speed, className, onScroll}, ref) => {
 
     const [boundScreen, setBoundScreen] = useState({});
     const [sizeScreen, setSizeScreen] = useState({x: 0, y: 0});
@@ -55,6 +55,16 @@ const Scrollbar = ({children, speed, className, onScroll}) => {
         e.preventDefault();
         e.stopPropagation();
     }, []);
+
+    useImperativeHandle(ref, () => ({
+        set: (direction, pxOffset) => {
+            const offset = pxOffset / (sizeContent[direction] - sizeScreen[direction]);
+            updateOffset(direction, offset);
+        },
+        get: (direction) => {
+            return (sizeContent[direction] - sizeScreen[direction]) * offsets[direction];
+        },
+    }));
 
     useEffect(() => {
         if (scopes.y === 1) {
@@ -101,7 +111,7 @@ const Scrollbar = ({children, speed, className, onScroll}) => {
         </div>
     );
 
-};
+});
 
 Scrollbar.defaultProps = {
     className: '',
