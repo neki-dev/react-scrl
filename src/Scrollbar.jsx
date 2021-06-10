@@ -17,7 +17,7 @@ if ('onwheel' in document) {
 
 const DIRECTIONS = ['x', 'y'];
 
-const Scrollbar = forwardRef(({children, speed, className, defaultOffsets, onScroll}, ref) => {
+const Scrollbar = forwardRef(({children, style, speed, className, defaultOffsets, onScroll}, ref) => {
 
     const [boundScreen, setBoundScreen] = useState({});
     const [sizeScreen, setSizeScreen] = useState({x: 0, y: 0});
@@ -107,7 +107,7 @@ const Scrollbar = forwardRef(({children, speed, className, defaultOffsets, onScr
     // ---
 
     return (
-        <div ref={refScreen} className={`scrollbar-screen ${className}`} style={boundScreen}>
+        <div ref={refScreen} className={`scrollbar-screen ${className}`} style={{...style, ...boundScreen}}>
             <div ref={refContent} className={`scrollbar-content ${isDragging ? 'dragging' : ''}`} style={(
                 DIRECTIONS.reduce((a, b) => ({...a, [(b === 'x') ? 'left' : 'top']: ((sizeContent[b] - sizeScreen[b]) * -offsets[b])}), {})
             )}>{children}</div>
@@ -125,6 +125,7 @@ Scrollbar.defaultProps = {
     speed: 1,
     onScroll: undefined,
     defaultOffsets: {x: 0, y: 0},
+    style: {},
 };
 
 Scrollbar.propTypes = {
@@ -132,6 +133,7 @@ Scrollbar.propTypes = {
     speed: PropTypes.number,
     onScroll: PropTypes.func,
     defaultOffsets: PropTypes.object,
+    style: PropTypes.object,
 };
 
 export default Scrollbar;
