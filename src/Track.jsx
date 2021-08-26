@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect, useCallback} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 
 const ScrollbarTrack = ({size, offset, scope, direction, onUpdate, onToggleDrag}) => {
@@ -11,7 +11,7 @@ const ScrollbarTrack = ({size, offset, scope, direction, onUpdate, onToggleDrag}
         start: 0,
     });
 
-    const onDrag = useCallback((e) => {
+    const onDrag = (e) => {
         onToggleDrag(true);
         setDragging(true);
         refDrag.current = {
@@ -19,14 +19,14 @@ const ScrollbarTrack = ({size, offset, scope, direction, onUpdate, onToggleDrag}
             start: (direction === 'x') ? e.pageX : e.pageY,
         };
         e.preventDefault();
-    }, [offset]);
+    };
 
-    const onUndrag = useCallback(() => {
+    const onUndrag = () => {
         onToggleDrag(false);
         setDragging(false);
-    }, []);
+    };
 
-    const onMove = useCallback((e) => {
+    const onMove = (e) => {
         const shift = refDrag.current.start - ((direction === 'x') ? e.pageX : e.pageY);
         const velocity = shift / (size * (1 - scope));
         const next = (velocity > 0)
@@ -36,7 +36,7 @@ const ScrollbarTrack = ({size, offset, scope, direction, onUpdate, onToggleDrag}
             onUpdate(next);
         }
         e.preventDefault();
-    }, [offset, scope, size]);
+    };
 
     useEffect(() => {
         const track = refTrack.current;
@@ -56,7 +56,7 @@ const ScrollbarTrack = ({size, offset, scope, direction, onUpdate, onToggleDrag}
             document.removeEventListener('mousemove', onMove);
             document.removeEventListener('mouseup', onUndrag);
         };
-    }, [isDragging, onMove]);
+    }, [isDragging]);
 
     useEffect(() => {
         return () => {

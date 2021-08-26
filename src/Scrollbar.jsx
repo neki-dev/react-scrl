@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect, useCallback, forwardRef, useImperativeHandle} from 'react';
+import React, {useState, useMemo, useEffect, forwardRef, useImperativeHandle} from 'react';
 import PropTypes from 'prop-types';
 import {useResizeDetector} from 'react-resize-detector';
 
@@ -40,21 +40,32 @@ const Scrollbar = forwardRef(({children, style, speed, className, defaultOffsets
         }), {});
     }, [sizeScreen, sizeContent]);
 
-    const updateOffset = useCallback((direction, offset) => {
+    const updateOffset = (direction, offset) => {
         setOffsets((offsets) => ({
             ...offsets,
             [direction]: (typeof offset === 'function') ? offset(offsets[direction]) : offset,
         }));
-    }, [sizeContent]);
+    };
 
-    const onMouseWheel = useCallback((e) => {
+    const onMouseWheel = (e) => {
+        for (const el of e.path) {
+            if (el.classList.contains('scrollbar-content')) {
+                break;
+            }
+            const style = getComputedStyle(el, null);
+            if (style.overflowY === 'scroll') {
+                // Stop scrolling, if targets is another element
+                // with default scroll
+                return;
+            }
+        }
         const velocity = ((e.wheelDeltaY || -e.deltaY) / 15 * speed) / 100;
         updateOffset('y', (offset) => (
             (velocity > 0) ? Math.max(0, offset - velocity) : Math.min(1, offset - velocity)
         ));
         e.preventDefault();
         e.stopPropagation();
-    }, []);
+    };
 
     useImperativeHandle(ref, () => ({
         set: (direction, pxOffset) => {
@@ -113,7 +124,7 @@ const Scrollbar = forwardRef(({children, style, speed, className, defaultOffsets
             )}>{children}</div>
             {DIRECTIONS.map((d) => (scopes[d] < 1) && (
                 <Track key={d} offset={offsets[d]} scope={scopes[d]} direction={d} size={sizeScreen[d]} onToggleDrag={setDragging}
-                       onUpdate={(offset) => updateOffset(d, offset)} />
+                    onUpdate={(offset) => updateOffset(d, offset)} />
             ))}
         </div>
     );
